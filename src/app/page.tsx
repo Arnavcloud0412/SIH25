@@ -23,7 +23,8 @@ import {
   Instagram,
   Mail,
   Phone,
-  Map
+  Map,
+  AlertCircle
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -88,6 +89,51 @@ export default function LandingPage() {
     }
   ];
 
+  const statsData = [
+    {
+      title: 'Total Claims Filed',
+      stat: '5.12M Claims Unlocked',
+      description: 'Highlight the massive scale of FRA claims digitized for transparency.',
+      icon: FileText,
+      color: 'blue'
+    },
+    {
+      title: 'Approval Rate',
+      stat: '49% Rights Secured',
+      description: 'Emphasize the portion of successful claims, urging for better efficiency.',
+      icon: BarChart3,
+      color: 'green'
+    },
+    {
+      title: 'Tribal Population Affected',
+      stat: '104.2M Lives Impacted',
+      description: 'Showcase the vast community relying on your solution for support.',
+      icon: Users,
+      color: 'purple'
+    },
+    {
+      title: 'Rejection Rate',
+      stat: '36.35% Denials Addressed',
+      description: 'Draw attention to the challenge your AI digitization aims to reduce.',
+      icon: AlertCircle,
+      color: 'red'
+    },
+    {
+      title: 'Land Vested',
+      stat: '190.39M Acres Mapped',
+      description: 'Celebrate the land area now linked to owners via satellite mapping.',
+      icon: Map,
+      color: 'orange'
+    },
+    {
+      title: 'Forest Cover Baseline',
+      stat: '7.15M sq km Protected',
+      description: 'Highlight the environmental scope your WebGIS atlas monitors.',
+      icon: Globe,
+      color: 'teal'
+    }
+  ];
+
   // Auto-rotate hero images
   useEffect(() => {
     const interval = setInterval(() => {
@@ -104,6 +150,20 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <style jsx global>{`
+        .card-hover:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .animate-fade-in {
+          animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -181,7 +241,7 @@ export default function LandingPage() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto animate-fade-in">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
             Empower Forest Rights with{' '}
             <span className="text-green-400">AI Innovation</span>
@@ -275,6 +335,49 @@ export default function LandingPage() {
               <div className="text-4xl font-bold mb-2">95%</div>
               <div className="text-green-200">Accuracy Rate</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key FRA Statistics Section */}
+      <section id="statistics" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Key FRA Statistics</h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Insights from our nationwide data-driven platform, highlighting the impact and challenges.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {statsData.map((stat, index) => {
+              const colorClasses = {
+                blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-600', iconBg: 'bg-blue-100', title: 'text-blue-900' },
+                green: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-600', iconBg: 'bg-green-100', title: 'text-green-900' },
+                purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-600', iconBg: 'bg-purple-100', title: 'text-purple-900' },
+                red: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-600', iconBg: 'bg-red-100', title: 'text-red-900' },
+                orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-600', iconBg: 'bg-orange-100', title: 'text-orange-900' },
+                teal: { bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-600', iconBg: 'bg-teal-100', title: 'text-teal-900' },
+              };
+              const classes = colorClasses[stat.color as keyof typeof colorClasses];
+              return (
+                <div key={index} className={`h-full p-6 rounded-xl border ${classes.bg} ${classes.border} flex flex-col justify-between card-hover`}>
+                  <div>
+                    <div className="flex items-start mb-4">
+                      <div className={`p-3 rounded-lg mr-4 ${classes.iconBg}`}>
+                        <stat.icon className={`h-6 w-6 ${classes.text}`} />
+                      </div>
+                      <h3 className={`text-base font-semibold ${classes.title}`}>{stat.title}</h3>
+                    </div>
+                    <p className="text-3xl font-bold text-gray-800 mb-2">{stat.stat.split(' ')[0]}</p>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed mt-2">
+                    <span className="font-semibold text-gray-700">{stat.stat.substring(stat.stat.indexOf(' ') + 1)}:</span>
+                    {' '}{stat.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
