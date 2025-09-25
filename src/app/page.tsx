@@ -175,7 +175,7 @@ export default function LandingPage() {
         }
 
         .section-padding {
-          @apply py-24;
+          @apply py-20;
         }
 
         h2 {
@@ -271,7 +271,7 @@ export default function LandingPage() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto animate-fade-in">
+        <div className="relative z-10 text-center text-white px-6 sm:px-8 lg:px-12 max-w-4xl mx-auto animate-fade-in">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
             Empower Forest Rights with{' '}
             <span className="text-green-400">AI Innovation</span>
@@ -317,7 +317,7 @@ export default function LandingPage() {
 
       {/* About Section */}
       <section id="about" className="section-padding bg-gray-50 flex justify-center">
-        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-16">
             <h2>About FRA-Mitra</h2>
             <p className="subtitle">
@@ -331,7 +331,7 @@ export default function LandingPage() {
           {/* Key Features */}
           <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
+              <div key={index} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-green-100 rounded-xl">
                     <feature.icon className="h-6 w-6 text-green-600" />
@@ -347,21 +347,21 @@ export default function LandingPage() {
 
        {/* Stats Section */}
       <section className="py-16 bg-green-600 text-white flex justify-center">
-        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
+            <div className="p-6">
               <div className="text-4xl font-bold mb-2">500+</div>
               <div className="text-green-200">Claims Processed</div>
             </div>
-            <div>
+            <div className="p-6">
               <div className="text-4xl font-bold mb-2">25+</div>
               <div className="text-green-200">Tribal Communities</div>
             </div>
-            <div>
+            <div className="p-6">
               <div className="text-4xl font-bold mb-2">15+</div>
               <div className="text-green-200">Forest Areas Mapped</div>
             </div>
-            <div>
+            <div className="p-6">
               <div className="text-4xl font-bold mb-2">95%</div>
               <div className="text-green-200">Accuracy Rate</div>
             </div>
@@ -371,7 +371,7 @@ export default function LandingPage() {
 
       {/* Key FRA Statistics Section */}
       <section id="statistics" className="section-padding bg-gray-50 flex justify-center">
-        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-16">
             <h2>Key FRA Statistics</h2>
             <p className="subtitle">
@@ -394,7 +394,7 @@ export default function LandingPage() {
               const statText = statTextParts.join(' ');
               
               return (
-                <div key={index} className={`bg-white p-6 rounded-xl border ${classes.border} flex flex-col card-hover transition-all duration-300`}>
+                <div key={index} className={`bg-white p-8 rounded-xl border ${classes.border} flex flex-col card-hover transition-all duration-300`}>
                   <div className="flex items-center text-sm font-semibold mb-3">
                     <stat.icon className={`h-5 w-5 mr-2 ${classes.text}`} />
                     <span className={classes.title}>{stat.title}</span>
@@ -413,7 +413,7 @@ export default function LandingPage() {
 
       {/* FAQ Section */}
       <section id="faq" className="section-padding bg-white flex justify-center">
-        <div className="w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-4xl px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-16">
             <h2>Frequently Asked Questions</h2>
             <p className="subtitle">
@@ -448,7 +448,7 @@ export default function LandingPage() {
 
       {/* Call to Action */}
       <section className="section-padding bg-gray-50 flex justify-center">
-        <div className="w-full max-w-4xl text-center px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-4xl text-center px-6 sm:px-8 lg:px-12">
           <h2>
             Ready to Transform FRA Implementation?
           </h2>
@@ -474,7 +474,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer id="contact" className="bg-gray-900 text-white py-16 flex justify-center">
-        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
