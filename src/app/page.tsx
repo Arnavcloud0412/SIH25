@@ -151,11 +151,41 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       <style jsx global>{`
-        .card-hover:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body {
+          font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+          @apply bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+        }
+
+        .btn-secondary {
+          @apply border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all duration-300;
+        }
+
+        .btn-tertiary {
+          @apply border-2 border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition-all duration-300;
         }
         
+        .card-hover:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.07);
+        }
+
+        .section-padding {
+          @apply py-24;
+        }
+
+        h2 {
+          @apply text-4xl font-bold text-gray-900 mb-6;
+        }
+
+        .subtitle {
+          @apply text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed;
+        }
+
         .animate-fade-in {
           animation: fadeIn 1.5s ease-in-out;
         }
@@ -255,14 +285,14 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/dashboard"
-              className="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors text-lg flex items-center justify-center space-x-2"
+              className="btn-primary flex items-center justify-center space-x-2"
             >
               <span>Get Started</span>
               <ArrowRight className="h-5 w-5" />
             </Link>
             <Link 
               href="#about"
-              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors text-lg"
+              className="btn-secondary"
             >
               Learn More
             </Link>
@@ -286,11 +316,11 @@ export default function LandingPage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="about" className="section-padding bg-gray-50 flex justify-center">
+        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">About FRA-Mitra</h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+            <h2>About FRA-Mitra</h2>
+            <p className="subtitle">
               FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA) 
               claim management across India. Our innovative system combines artificial intelligence for 
               digitization, satellite mapping for asset visualization, WebGIS for interactive mapping, 
@@ -301,7 +331,7 @@ export default function LandingPage() {
           {/* Key Features */}
           <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow card-hover">
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-green-100 rounded-xl">
                     <feature.icon className="h-6 w-6 text-green-600" />
@@ -315,9 +345,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-green-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       {/* Stats Section */}
+      <section className="py-16 bg-green-600 text-white flex justify-center">
+        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold mb-2">500+</div>
@@ -340,11 +370,11 @@ export default function LandingPage() {
       </section>
 
       {/* Key FRA Statistics Section */}
-      <section id="statistics" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="statistics" className="section-padding bg-gray-50 flex justify-center">
+        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Key FRA Statistics</h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+            <h2>Key FRA Statistics</h2>
+            <p className="subtitle">
               Insights from our nationwide data-driven platform, highlighting the impact and challenges.
             </p>
           </div>
@@ -352,29 +382,28 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {statsData.map((stat, index) => {
               const colorClasses = {
-                blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-600', iconBg: 'bg-blue-100', title: 'text-blue-900' },
-                green: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-600', iconBg: 'bg-green-100', title: 'text-green-900' },
-                purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-600', iconBg: 'bg-purple-100', title: 'text-purple-900' },
-                red: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-600', iconBg: 'bg-red-100', title: 'text-red-900' },
-                orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-600', iconBg: 'bg-orange-100', title: 'text-orange-900' },
-                teal: { bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-600', iconBg: 'bg-teal-100', title: 'text-teal-900' },
+                blue: { border: 'border-blue-200', text: 'text-blue-600', title: 'text-blue-900' },
+                green: { border: 'border-green-200', text: 'text-green-600', title: 'text-green-900' },
+                purple: { border: 'border-purple-200', text: 'text-purple-600', title: 'text-purple-900' },
+                red: { border: 'border-red-200', text: 'text-red-600', title: 'text-red-900' },
+                orange: { border: 'border-orange-200', text: 'text-orange-600', title: 'text-orange-900' },
+                teal: { border: 'border-teal-200', text: 'text-teal-600', title: 'text-teal-900' },
               };
               const classes = colorClasses[stat.color as keyof typeof colorClasses];
+              const [statVal, ...statTextParts] = stat.stat.split(' ');
+              const statText = statTextParts.join(' ');
+              
               return (
-                <div key={index} className={`h-full p-6 rounded-xl border ${classes.bg} ${classes.border} flex flex-col justify-between card-hover`}>
-                  <div>
-                    <div className="flex items-start mb-4">
-                      <div className={`p-3 rounded-lg mr-4 ${classes.iconBg}`}>
-                        <stat.icon className={`h-6 w-6 ${classes.text}`} />
-                      </div>
-                      <h3 className={`text-base font-semibold ${classes.title}`}>{stat.title}</h3>
-                    </div>
-                    <p className="text-3xl font-bold text-gray-800 mb-2">{stat.stat.split(' ')[0]}</p>
+                <div key={index} className={`bg-white p-6 rounded-xl border ${classes.border} flex flex-col card-hover transition-all duration-300`}>
+                  <div className="flex items-center text-sm font-semibold mb-3">
+                    <stat.icon className={`h-5 w-5 mr-2 ${classes.text}`} />
+                    <span className={classes.title}>{stat.title}</span>
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed mt-2">
-                    <span className="font-semibold text-gray-700">{stat.stat.substring(stat.stat.indexOf(' ') + 1)}:</span>
-                    {' '}{stat.description}
-                  </p>
+                  <div>
+                    <p className="text-4xl font-bold text-gray-800 mb-1">{statVal}</p>
+                    <p className="text-gray-500 font-medium text-sm mb-3 h-5">{statText}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{stat.description}</p>
+                  </div>
                 </div>
               );
             })}
@@ -383,11 +412,11 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="faq" className="section-padding bg-white flex justify-center">
+        <div className="w-full max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-            <p className="text-xl text-gray-600">
+            <h2>Frequently Asked Questions</h2>
+            <p className="subtitle">
               Find answers to common questions about FRA-Mitra
             </p>
           </div>
@@ -418,24 +447,24 @@ export default function LandingPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+      <section className="section-padding bg-gray-50 flex justify-center">
+        <div className="w-full max-w-4xl text-center px-4 sm:px-6 lg:px-8">
+          <h2>
             Ready to Transform FRA Implementation?
           </h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="subtitle mb-8">
             Join policymakers, NGOs, and communities in revolutionizing forest rights management
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/dashboard"
-              className="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors text-lg"
+              className="btn-primary"
             >
               Start Your Journey
             </Link>
             <Link 
               href="#contact"
-              className="border-2 border-green-600 text-green-600 px-8 py-4 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition-colors text-lg"
+              className="btn-tertiary"
             >
               Contact Us
             </Link>
@@ -444,8 +473,8 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer id="contact" className="bg-gray-900 text-white py-16 flex justify-center">
+        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">

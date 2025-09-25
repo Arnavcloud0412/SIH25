@@ -57,6 +57,31 @@ body {
   line-height: 1.6;
 }
 
+/* Custom container for centering content */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Card styling with consistent padding */
+.card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--card);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Apply card hover effect */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -97,12 +122,7 @@ body {
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Card hover effects */
+/* Card hover effects (moved to .card:hover) */
 .card-hover {
   transition: all 0.3s ease;
-}
-
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
 }
