@@ -151,10 +151,15 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700;900&display=swap');
         
         body {
           font-family: 'Inter', sans-serif;
+        }
+
+        .section-title {
+          font-family: 'Merriweather', serif;
+          @apply text-5xl font-bold text-green-900;
         }
 
         .btn-primary {
@@ -172,10 +177,6 @@ export default function LandingPage() {
         .card-hover:hover {
           transform: translateY(-5px);
           box-shadow: 0 10px 20px rgba(0,0,0,0.07);
-        }
-
-        .section-padding {
-          @apply py-20;
         }
 
         h2 {
@@ -316,23 +317,23 @@ export default function LandingPage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="section-padding bg-gray-50 flex justify-center">
+      <section id="about" className="pt-48 pb-40 bg-gray-50 flex justify-center">
         <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-        <div className="text-center mb-16">
-      <h2 className="text-black">About FRA-Mitra</h2>
-      <p className="subtitle text-black">
-        FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA) 
-        claim management across India. Our innovative system combines artificial intelligence for 
-        digitization, satellite mapping for asset visualization, WebGIS for interactive mapping, 
-        and intelligent Decision Support Systems for targeted scheme recommendations.
-      </p>
-    </div>
+     <div className="text-center mb-36">
+       <h2 className="section-title">About FRA-Mitra</h2>
+       <p className="subtitle text-black mt-8">
+         FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA) 
+         claim management across India. Our innovative system combines artificial intelligence for 
+         digitization, satellite mapping for asset visualization, WebGIS for interactive mapping, 
+         and intelligent Decision Support Systems for targeted scheme recommendations.
+       </p>
+     </div>
 
           {/* Key Features */}
-          <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
             {features.map((feature, index) => (
               <div key={index} className="bg-white p-8 rounded-xl shadow-sm border-2 border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-10">
                   <div className="p-3 bg-green-100 rounded-xl">
                     <feature.icon className="h-6 w-6 text-green-600" />
                   </div>
@@ -346,22 +347,22 @@ export default function LandingPage() {
       </section>
 
        {/* Stats Section */}
-      <section className="py-16 bg-green-600 text-white flex justify-center">
+      <section className="py-32 bg-green-600 text-white flex justify-center">
         <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div className="p-6">
+            <div className="p-10">
               <div className="text-4xl font-bold mb-2">500+</div>
               <div className="text-green-200">Claims Processed</div>
             </div>
-            <div className="p-6">
+            <div className="p-10">
               <div className="text-4xl font-bold mb-2">25+</div>
               <div className="text-green-200">Tribal Communities</div>
             </div>
-            <div className="p-6">
+            <div className="p-10">
               <div className="text-4xl font-bold mb-2">15+</div>
               <div className="text-green-200">Forest Areas Mapped</div>
             </div>
-            <div className="p-6">
+            <div className="p-10">
               <div className="text-4xl font-bold mb-2">95%</div>
               <div className="text-green-200">Accuracy Rate</div>
             </div>
@@ -370,14 +371,14 @@ export default function LandingPage() {
       </section>
 
       {/* Key FRA Statistics Section */}
-      <section id="statistics" className="section-padding bg-gray-50 flex justify-center">
+      <section id="statistics" className="pt-48 pb-40 bg-gray-50 flex justify-center">
         <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-black">Key FRA Statistics</h2>
-            <p className="subtitle text-black">
-              Insights from our nationwide data-driven platform, highlighting the impact and challenges.
-            </p>
-        </div> 
+             <div className="text-center mb-36">
+             <h2 className="text-black">Key FRA Statistics</h2>
+             <p className="subtitle text-black">
+                Insights from our nationwide data-driven platform, highlighting the impact and challenges.
+              </p>
+         </div> 
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {statsData.map((stat, index) => {
@@ -412,14 +413,14 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="section-padding bg-white flex justify-center">
+      <section id="faq" className="pt-48 pb-40 bg-white flex justify-center">
         <div className="w-full max-w-4xl px-6 sm:px-8 lg:px-12">
-        <div className="text-center mb-16">
-          <h2 className="text-black">Frequently Asked Questions</h2>
-            <p className="subtitle text-black">
-              Find answers to common questions about FRA-Mitra
-          </p>
-        </div>
+         <div className="text-center mb-36">
+           <h2 className="text-black">Frequently Asked Questions</h2>
+             <p className="subtitle text-black">
+                Find answers to common questions about FRA-Mitra
+           </p>
+         </div>
 
           <div className="space-y-4">
             {faqData.map((faq, index) => (
@@ -447,7 +448,7 @@ export default function LandingPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="section-padding bg-gray-50 flex justify-center">
+      <section className="pt-48 pb-40 bg-gray-50 flex justify-center">
         <div className="w-full max-w-4xl text-center px-6 sm:px-8 lg:px-12">
           <h2>
             Ready to Transform FRA Implementation?
