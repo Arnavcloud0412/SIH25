@@ -70,7 +70,7 @@ body {
 /* Card styling with consistent padding */
 .card {
   padding: 20px;
-  border: 1px solid var(--border);
+  border: 5px solid var(--border);
   border-radius: 8px;
   background-color: var(--card);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

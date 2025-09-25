@@ -318,20 +318,20 @@ export default function LandingPage() {
       {/* About Section */}
       <section id="about" className="section-padding bg-gray-50 flex justify-center">
         <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-16">
-            <h2>About FRA-Mitra</h2>
-            <p className="subtitle">
-              FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA) 
-              claim management across India. Our innovative system combines artificial intelligence for 
-              digitization, satellite mapping for asset visualization, WebGIS for interactive mapping, 
-              and intelligent Decision Support Systems for targeted scheme recommendations.
-            </p>
-          </div>
+        <div className="text-center mb-16">
+      <h2 className="text-black">About FRA-Mitra</h2>
+      <p className="subtitle text-black">
+        FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA) 
+        claim management across India. Our innovative system combines artificial intelligence for 
+        digitization, satellite mapping for asset visualization, WebGIS for interactive mapping, 
+        and intelligent Decision Support Systems for targeted scheme recommendations.
+      </p>
+    </div>
 
           {/* Key Features */}
           <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
+              <div key={index} className="bg-white p-8 rounded-xl shadow-sm border-2 border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-green-100 rounded-xl">
                     <feature.icon className="h-6 w-6 text-green-600" />
@@ -373,11 +373,11 @@ export default function LandingPage() {
       <section id="statistics" className="section-padding bg-gray-50 flex justify-center">
         <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="text-center mb-16">
-            <h2>Key FRA Statistics</h2>
-            <p className="subtitle">
+            <h2 className="text-black">Key FRA Statistics</h2>
+            <p className="subtitle text-black">
               Insights from our nationwide data-driven platform, highlighting the impact and challenges.
             </p>
-          </div>
+        </div> 
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {statsData.map((stat, index) => {
@@ -394,7 +394,7 @@ export default function LandingPage() {
               const statText = statTextParts.join(' ');
               
               return (
-                <div key={index} className={`bg-white p-8 rounded-xl border ${classes.border} flex flex-col card-hover transition-all duration-300`}>
+                <div key={index} className={`bg-white p-8 rounded-xl border-2 ${classes.border} flex flex-col card-hover transition-all duration-300`}>
                   <div className="flex items-center text-sm font-semibold mb-3">
                     <stat.icon className={`h-5 w-5 mr-2 ${classes.text}`} />
                     <span className={classes.title}>{stat.title}</span>
@@ -414,12 +414,12 @@ export default function LandingPage() {
       {/* FAQ Section */}
       <section id="faq" className="section-padding bg-white flex justify-center">
         <div className="w-full max-w-4xl px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-16">
-            <h2>Frequently Asked Questions</h2>
-            <p className="subtitle">
+        <div className="text-center mb-16">
+          <h2 className="text-black">Frequently Asked Questions</h2>
+            <p className="subtitle text-black">
               Find answers to common questions about FRA-Mitra
-            </p>
-          </div>
+          </p>
+        </div>
 
           <div className="space-y-4">
             {faqData.map((faq, index) => (
