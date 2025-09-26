@@ -12,7 +12,11 @@ export const metadata: Metadata = {
   description: "Comprehensive web platform for monitoring Forest Rights Act (FRA) implementation in India with AI-powered analytics and WebGIS-based decision support",
   keywords: ["Forest Rights Act", "FRA", "India", "Tribal Rights", "GIS", "Decision Support System", "AI", "Forest Management"],
   authors: [{ name: "FRA-Mitra Team" }],
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -23,7 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>

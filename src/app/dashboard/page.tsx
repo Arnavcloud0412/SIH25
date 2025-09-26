@@ -21,6 +21,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { dashboardStats, mockFRAClaims, mockTribalGroups } from '@/data/mockData';
 
 import { useEffect } from 'react';
@@ -106,7 +107,13 @@ export default function Dashboard() {
             <div className="flex items-center space-x-4">
               <Link href="/" className="flex items-center space-x-3">
                 <div className="p-2 bg-emerald-100 rounded-xl">
-                  <TreePine className="h-8 w-8 text-emerald-600" />
+                  <Image 
+                    src="/logo.png" 
+                    alt="FRA-Mitra Logo" 
+                    width={32} 
+                    height={32} 
+                    className="h-8 w-8"
+                  />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-slate-900">FRA-Mitra</h1>
@@ -123,8 +130,16 @@ export default function Dashboard() {
               <button className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                 <Settings className="h-5 w-5" />
               </button>
-              <button className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
-                Admin Login
+              <button 
+                onClick={() => {
+                  localStorage.removeItem('isLoggedIn');
+                  localStorage.removeItem('userEmail');
+                  localStorage.removeItem('userName');
+                  router.push('/');
+                }}
+                className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
+              >
+                Logout
               </button>
             </div>
           </div>
