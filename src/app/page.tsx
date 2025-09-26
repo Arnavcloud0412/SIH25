@@ -214,7 +214,7 @@ export default function LandingPage() {
             <div className="hidden md:flex items-center space-x-8">
               <Link href="#home" className="text-gray-700 hover:text-green-600 transition-colors">Home</Link>
               <Link href="#about" className="text-gray-700 hover:text-green-600 transition-colors">About</Link>
-              <Link href="#features" className="text-gray-700 hover:text-green-600 transition-colors">Impact</Link>
+              <Link href="#features" className="text-gray-700 hover:text-green-600 transition-colors">Features</Link>
               <Link href="#faq" className="text-gray-700 hover:text-green-600 transition-colors">FAQ</Link>
               <Link href="#contact" className="text-gray-700 hover:text-green-600 transition-colors">Contact</Link>
             </div>
@@ -319,31 +319,38 @@ export default function LandingPage() {
           <div className="text-center mb-12">
             <h2 className="text-black text-4xl font-bold">About FRA-Mitra</h2>
             <p className="text-black text-lg mt-8">
-              FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA)
-              claim management across India. Our innovative system combines artificial intelligence for
-              digitization, satellite mapping for asset visualization, WebGIS for interactive mapping,
+              FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA) 
+              claim management across India. Our innovative system combines artificial intelligence for 
+              digitization, satellite mapping for asset visualization, WebGIS for interactive mapping, 
               and intelligent Decision Support Systems for targeted scheme recommendations.
             </p>
           </div>
 
-          {/* Key Features */}
-          <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-24">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-sm border-2 border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
-                <div className="flex items-center mb-10">
-                  <div className="p-3 bg-green-100 rounded-xl">
-                    <feature.icon className="h-6 w-6 text-green-600" />
+          {/* Key Features Section with Expanded Width */}
+        <section>
+          <div className="max-w-screen-xl mx-auto">
+            <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-24">
+              {features.map((feature, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-8 rounded-xl shadow-sm border-2 border-green-200 hover:shadow-lg transition-all duration-300 card-hover"
+                >
+                  <div className="flex items-center mb-10">
+                    <div className="p-3 bg-green-100 rounded-xl">
+                      <feature.icon className="h-6 w-6 text-green-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 ml-3">{feature.title}</h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 ml-3">{feature.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+        </section>
         </div>
       </section>
 
-       {/* Stats Section */}
+      {/* Stats Section */}
       <section className="py-10 bg-green-600 text-white flex justify-center">
         <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-20 text-center">
@@ -371,8 +378,8 @@ export default function LandingPage() {
       <section id="statistics" className="pt-48 pb-40 bg-gray-50 flex justify-center">
         <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
              <div className="text-center mb-36">
-             <h2 className="text-black">Key FRA Statistics</h2>
-             <p className="subtitle text-black">
+             <h2 className="text-black text-4xl font-bold">Key FRA Statistics</h2>
+             <p className="text-black text-lg mt-8">
                 Insights from our nationwide data-driven platform, highlighting the impact and challenges.
               </p>
          </div> 
@@ -415,9 +422,9 @@ export default function LandingPage() {
          <div className="text-center mb-36">
            <h2 className="text-black">Frequently Asked Questions</h2>
              <p className="subtitle text-black">
-                Find answers to common questions about FRA-Mitra
-           </p>
-         </div>
+              Find answers to common questions about FRA-Mitra
+            </p>
+          </div>
 
           <div className="space-y-4">
             {faqData.map((faq, index) => (
