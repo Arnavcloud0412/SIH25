@@ -162,6 +162,10 @@ export default function LandingPage() {
           @apply text-5xl font-bold text-green-900;
         }
 
+        .section-heading {
+          @apply text-lg font-semibold text-gray-500 bg-gray-200 inline-block px-4 py-2 rounded-full;
+        }
+
         .btn-primary {
           @apply bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
         }
@@ -184,7 +188,7 @@ export default function LandingPage() {
         }
 
         .subtitle {
-          @apply text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed;
+          @apply text-xl text-gray-900 max-w-4xl mx-auto leading-relaxed;
         }
 
         .animate-fade-in {
@@ -283,19 +287,12 @@ export default function LandingPage() {
             and deliver targeted welfare schemes for efficient FRA implementation.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Link 
               href="/dashboard"
-              className="btn-primary flex items-center justify-center space-x-2"
+              className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold"
             >
-              <span>Get Started</span>
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-            <Link 
-              href="#about"
-              className="btn-secondary"
-            >
-              Learn More
+              Get Started
             </Link>
           </div>
         </div>
@@ -319,18 +316,18 @@ export default function LandingPage() {
       {/* About Section */}
       <section id="about" className="pt-48 pb-40 bg-gray-50 flex justify-center">
         <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-     <div className="text-center mb-36">
-       <h2 className="section-title">About FRA-Mitra</h2>
-       <p className="subtitle text-black mt-8">
-         FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA) 
-         claim management across India. Our innovative system combines artificial intelligence for 
-         digitization, satellite mapping for asset visualization, WebGIS for interactive mapping, 
-         and intelligent Decision Support Systems for targeted scheme recommendations.
-       </p>
-     </div>
+          <div className="text-center mb-12">
+            <h2 className="text-black text-4xl font-bold">About FRA-Mitra</h2>
+            <p className="text-black text-lg mt-8">
+              FRA-Mitra is a comprehensive AI-powered platform that streamlines Forest Rights Act (FRA)
+              claim management across India. Our innovative system combines artificial intelligence for
+              digitization, satellite mapping for asset visualization, WebGIS for interactive mapping,
+              and intelligent Decision Support Systems for targeted scheme recommendations.
+            </p>
+          </div>
 
           {/* Key Features */}
-          <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+          <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-24">
             {features.map((feature, index) => (
               <div key={index} className="bg-white p-8 rounded-xl shadow-sm border-2 border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
                 <div className="flex items-center mb-10">
@@ -347,9 +344,9 @@ export default function LandingPage() {
       </section>
 
        {/* Stats Section */}
-      <section className="py-32 bg-green-600 text-white flex justify-center">
-        <div className="w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+      <section className="py-10 bg-green-600 text-white flex justify-center">
+        <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-20 text-center">
             <div className="p-10">
               <div className="text-4xl font-bold mb-2">500+</div>
               <div className="text-green-200">Claims Processed</div>
