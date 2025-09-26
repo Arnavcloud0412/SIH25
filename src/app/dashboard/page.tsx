@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { 
-  Map, 
-  BarChart3, 
-  Users, 
-  TreePine, 
-  FileText, 
+import {
+  Map,
+  BarChart3,
+  Users,
+  TreePine,
+  FileText,
   Filter,
   Search,
   Download,
@@ -23,7 +23,22 @@ import {
 import Link from 'next/link';
 import { dashboardStats, mockFRAClaims, mockTribalGroups } from '@/data/mockData';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 export default function Dashboard() {
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    const email = localStorage.getItem('userEmail');
+    const loggedIn = localStorage.getItem('isLoggedIn');
+    if (!loggedIn) {
+      router.push('/signin');
+    } else {
+      setUserEmail(email || 'User');
+    }
+  }, [router]);
   const [selectedFilters, setSelectedFilters] = useState({
     state: 'All',
     tribalGroup: 'All',
@@ -35,9 +50,9 @@ export default function Dashboard() {
 
   const filteredClaims = mockFRAClaims.filter(claim => {
     const matchesSearch = claim.claimantName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         claim.village.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         claim.district.toLowerCase().includes(searchQuery.toLowerCase());
-    
+      claim.village.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      claim.district.toLowerCase().includes(searchQuery.toLowerCase());
+
     const matchesState = selectedFilters.state === 'All' || claim.state === selectedFilters.state;
     const matchesTribalGroup = selectedFilters.tribalGroup === 'All' || claim.tribalGroup === selectedFilters.tribalGroup;
     const matchesStatus = selectedFilters.status === 'All' || claim.status === selectedFilters.status;
@@ -99,7 +114,7 @@ export default function Dashboard() {
                 </div>
               </Link>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <Link href="/" className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors">
                 <ArrowLeft className="h-4 w-4" />
@@ -179,7 +194,7 @@ export default function Dashboard() {
             <h3 className="text-lg font-semibold text-slate-900">Claims Status Distribution</h3>
             <TrendingUp className="h-5 w-5 text-emerald-600" />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {statusData.map((item) => (
               <div key={item.status} className="text-center">
@@ -210,7 +225,7 @@ export default function Dashboard() {
                 />
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -219,7 +234,7 @@ export default function Dashboard() {
                 <Filter className="h-4 w-4" />
                 <span>Filters</span>
               </button>
-              
+
               <button className="flex items-center space-x-2 px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
                 <Download className="h-4 w-4" />
                 <span>Export</span>
@@ -235,7 +250,7 @@ export default function Dashboard() {
                   <label className="block text-sm font-medium text-slate-700 mb-2">State</label>
                   <select
                     value={selectedFilters.state}
-                    onChange={(e) => setSelectedFilters({...selectedFilters, state: e.target.value})}
+                    onChange={(e) => setSelectedFilters({ ...selectedFilters, state: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   >
                     <option value="All">All States</option>
@@ -249,7 +264,7 @@ export default function Dashboard() {
                   <label className="block text-sm font-medium text-slate-700 mb-2">Tribal Group</label>
                   <select
                     value={selectedFilters.tribalGroup}
-                    onChange={(e) => setSelectedFilters({...selectedFilters, tribalGroup: e.target.value})}
+                    onChange={(e) => setSelectedFilters({ ...selectedFilters, tribalGroup: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   >
                     <option value="All">All Groups</option>
@@ -263,7 +278,7 @@ export default function Dashboard() {
                   <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
                   <select
                     value={selectedFilters.status}
-                    onChange={(e) => setSelectedFilters({...selectedFilters, status: e.target.value})}
+                    onChange={(e) => setSelectedFilters({ ...selectedFilters, status: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   >
                     <option value="All">All Status</option>
@@ -278,7 +293,7 @@ export default function Dashboard() {
                   <label className="block text-sm font-medium text-slate-700 mb-2">Claim Type</label>
                   <select
                     value={selectedFilters.claimType}
-                    onChange={(e) => setSelectedFilters({...selectedFilters, claimType: e.target.value})}
+                    onChange={(e) => setSelectedFilters({ ...selectedFilters, claimType: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   >
                     <option value="All">All Types</option>
@@ -303,7 +318,7 @@ export default function Dashboard() {
               </button>
             </div>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-slate-50">
