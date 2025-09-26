@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import CountUp from 'react-countup';
 import { 
   TreePine, 
   Brain, 
@@ -330,7 +329,7 @@ export default function LandingPage() {
           {/* Key Features Section with Expanded Width */}
         <section>
           <div className="max-w-screen-xl mx-auto">
-            <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-24">
+            <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap- mt-24">
               {features.map((feature, index) => (
                 <div
                   key={index}
@@ -350,24 +349,25 @@ export default function LandingPage() {
         </section>
         </div>
       </section>
+
       {/* Stats Section */}
       <section className="py-10 bg-green-600 text-white flex justify-center">
         <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-20 text-center">
             <div className="p-10">
-              <div className="text-4xl font-bold mb-2"><CountUp end={500} duration={2.5} enableScrollSpy />+</div>
+              <div className="text-4xl font-bold mb-2">500+</div>
               <div className="text-green-200">Claims Processed</div>
             </div>
             <div className="p-10">
-              <div className="text-4xl font-bold mb-2"><CountUp end={25} duration={2.5} enableScrollSpy />+</div>
+              <div className="text-4xl font-bold mb-2">25+</div>
               <div className="text-green-200">Tribal Communities</div>
             </div>
             <div className="p-10">
-              <div className="text-4xl font-bold mb-2"><CountUp end={15} duration={2.5} enableScrollSpy />+</div>
+              <div className="text-4xl font-bold mb-2">15+</div>
               <div className="text-green-200">Forest Areas Mapped</div>
             </div>
             <div className="p-10">
-              <div className="text-4xl font-bold mb-2"><CountUp end={95} duration={2.5} enableScrollSpy />%</div>
+              <div className="text-4xl font-bold mb-2">95%</div>
               <div className="text-green-200">Accuracy Rate</div>
             </div>
           </div>
