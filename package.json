@@ -6,21 +6,33 @@
     "dev": "next dev --turbopack -p 3001",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@prisma/client": "^6.16.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/d3": "^7.4.3",
     "@types/leaflet": "^1.9.20",
+    "@types/pg": "^8.15.5",
+    "bcryptjs": "^3.0.2",
     "d3": "^7.9.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.544.0",
     "next": "15.5.4",
+    "pg": "^8.16.3",
+    "prisma": "^6.16.2",
     "react": "19.1.0",
     "react-countup": "^6.5.3",
     "react-dom": "19.1.0",
     "react-leaflet": "^5.0.0",
-    "recharts": "^3.2.1"
+    "recharts": "^3.2.1",
+    "tsx": "^4.20.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { TreePine, Eye, EyeOff, ArrowLeft, Mail, Lock, User } from 'lucide-react';
+import AlertModal from '@/components/AlertModal';
 
 export default function SignInSignUp() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
@@ -17,36 +18,108 @@ export default function SignInSignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  // Alert modal state
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info' as 'success' | 'error' | 'warning' | 'info'
+  });
+
+  // Helper function to show alert modal
+  const showAlert = (title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+    setAlertModal({
+      isOpen: true,
+      title,
+      message,
+      type
+    });
+  };
+
+  // Helper function to close alert modal
+  const closeAlert = () => {
+    setAlertModal(prev => ({ ...prev, isOpen: false }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (mode === 'signup' && password !== confirmPassword) {
-      alert('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
+    try {
+      if (mode === 'signup') {
+        if (password !== confirmPassword) {
+          showAlert('Password Mismatch', 'Passwords do not match', 'error');
+          setIsLoading(false);
+          return;
+        }
 
-    // Hardcoded credentials check
-    if (mode === 'signin') {
-      if (email !== 'testemail@gmail.com' || password !== 'pass') {
-        alert('Invalid credentials. Use: testemail@gmail.com / pass');
-        setIsLoading(false);
-        return;
+        // Sign up API call
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            name: fullName,
+            password,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('userEmail', email);
+          localStorage.setItem('userName', fullName);
+          localStorage.setItem('userId', result.data.id);
+          localStorage.setItem('userRole', result.data.role);
+          
+          showAlert('Account Created', 'Account created successfully!', 'success');
+          router.push('/dashboard');
+        } else {
+          showAlert('Signup Failed', result.error || 'Failed to create account', 'error');
+        }
+      } else {
+        // Sign in API call
+        const response = await fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('userEmail', email);
+          localStorage.setItem('userName', result.data.name || '');
+          localStorage.setItem('userId', result.data.id);
+          localStorage.setItem('userRole', result.data.role);
+          
+          router.push('/dashboard');
+        } else {
+          // Handle different error types
+          if (response.status === 404) {
+            showAlert('Email Not Registered', result.error || 'Email not registered. Please sign up first.', 'warning');
+          } else if (response.status === 401) {
+            showAlert('Incorrect Password', result.error || 'Incorrect password. Please try again.', 'error');
+          } else {
+            showAlert('Sign In Failed', result.error || 'Invalid credentials', 'error');
+          }
+        }
       }
+    } catch (error) {
+      console.error('Authentication error:', error);
+      showAlert('Authentication Error', 'An error occurred. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
     }
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userEmail', email);
-    if (mode === 'signup') {
-      localStorage.setItem('userName', fullName);
-    }
-
-    setIsLoading(false);
-    router.push('/dashboard');
   };
 
   return (
@@ -186,17 +259,6 @@ export default function SignInSignUp() {
               </div>
             )}
 
-            {mode === 'signin' && (
-              <div className="flex items-center justify-between">
-                <label className="flex items-center">
-                  <input type="checkbox" className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
-                  <span className="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-                <button type="button" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
-                  Forgot password?
-                </button>
-              </div>
-            )}
 
             <button
               type="submit"
@@ -214,20 +276,6 @@ export default function SignInSignUp() {
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="my-6 flex items-center">
-            <div className="flex-1 border-t border-gray-200"></div>
-            <span className="px-4 text-sm text-gray-500">or</span>
-            <div className="flex-1 border-t border-gray-200"></div>
-          </div>
-
-          {/* Social Login */}
-          <div className="space-y-3">
-            <button className="w-full flex items-center justify-center space-x-3 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
-              <div className="w-5 h-5 bg-blue-600 rounded"></div>
-              <span className="text-gray-700 font-medium">Continue with Google</span>
-            </button>
-          </div>
 
           {/* Mode Toggle */}
           <div className="mt-6 text-center">
@@ -252,6 +300,15 @@ export default function SignInSignUp() {
           <a href="#" className="text-emerald-600 hover:text-emerald-700">Privacy Policy</a>
         </div>
       </div>
+      
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModal.isOpen}
+        onClose={closeAlert}
+        title={alertModal.title}
+        message={alertModal.message}
+        type={alertModal.type}
+      />
     </div>
   );
 }

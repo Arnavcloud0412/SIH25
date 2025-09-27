@@ -153,7 +153,7 @@ Process the document and return only the JSON object with the extracted data.
         console.error(`Error processing file ${file.name}:`, error);
         processedResults.push({
           filename: file.name,
-          error: error.message,
+          error: error instanceof Error ? error.message : 'Unknown error',
           success: false
         });
       }

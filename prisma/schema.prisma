@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and user management
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String   // Hashed password for authentication
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  claims     Claim[]
+  documents  Document[]
+
+  @@map("users")
+}
+
+// Claim model for storing claim details
+model Claim {
+  id          String      @id @default(cuid())
+  claimNumber String      @unique
+  
+  // Personal Information
+  claimantName        String
+  spouseName          String?
+  fatherMotherName    String?
+  
+  // Address Information
+  address             String
+  village             String
+  gramPanchayat       String
+  tehsilTaluka        String
+  district            String
+  state               String
+  
+  // Category Information
+  isScheduledTribe    Boolean @default(false)
+  isOtherTraditionalForestDweller Boolean @default(false)
+  
+  // Family Members
+  familyMembers       Json? // Array of {name: string, age: number}
+  
+  // Claim Details
+  title               String
+  description         String?
+  status              ClaimStatus @default(PENDING)
+  priority            Priority @default(MEDIUM)
+  category            String?
+  amount              Decimal? @db.Decimal(15, 2)
+  currency            String @default("INR")
+  
+  // User who created the claim
+  userId              String
+  user                User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  submittedAt         DateTime?
+  processedAt         DateTime?
+  
+  // Relations
+  documents           Document[]
+
+  // Unique indexes to prevent duplicate claims
+  @@unique([userId, claimantName, village, district, state], name: "unique_user_claim")
+  @@unique([claimantName, fatherMotherName, village, district], name: "unique_claimant_location")
+  @@index([userId, status], name: "user_status_index")
+  @@index([district, state], name: "location_index")
+  @@index([status, createdAt], name: "status_created_index")
+  @@map("claims")
+}
+
+// Document model for storing uploaded documents
+model Document {
+  id          String        @id @default(cuid())
+  filename    String
+  originalName String
+  filePath    String
+  fileSize    Int
+  mimeType    String
+  fileType    DocumentType
+  
+  // Associated user and claim
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  claimId     String?
+  claim       Claim?        @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  
+  // Processing status
+  status      DocumentStatus @default(UPLOADED)
+  processedAt DateTime?
+  
+  // AI/ML processing results
+  extractedText String?
+  confidence    Float?
+  metadata      Json?
+  
+  // Timestamps
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("documents")
+}
+
+// Enums
+enum UserRole {
+  ADMIN
+  USER
+  REVIEWER
+}
+
+enum ClaimStatus {
+  DRAFT
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  PROCESSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum DocumentType {
+  INVOICE
+  RECEIPT
+  CONTRACT
+  IDENTITY_DOCUMENT
+  BANK_STATEMENT
+  MEDICAL_REPORT
+  INSURANCE_POLICY
+  OTHER
+}
+
+enum DocumentStatus {
+  UPLOADED
+  PROCESSING
+  PROCESSED
+  FAILED
+}

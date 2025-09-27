@@ -35,7 +35,7 @@ const translations = {
     nav: {
       home: 'Home',
       about: 'About',
-      features: 'Features',
+      features: 'Impact',
       faq: 'FAQ',
       contact: 'Contact',
       login: 'Login'
