@@ -21,6 +21,13 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
   loading: () => <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">Loading map...</div>
 });
 
+// Mock data for admin panel
+const mockUsers = [
+  { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'admin' },
+  { id: '2', name: 'Field Officer', email: 'officer@example.com', role: 'field_officer' },
+  { id: '3', name: 'Ram Singh', email: 'ram@example.com', role: 'claimant' }
+];
+
 // Claims will be fetched from database
 
 // Users will be fetched from database
@@ -74,90 +81,6 @@ export default function Dashboard() {
   const renderCount = useRef(0);
   renderCount.current += 1;
 
-  // Recovery mechanism - restore state from localStorage only when DSS tab is active
-  useEffect(() => {
-    // Check if we're in the browser environment
-    if (typeof window === 'undefined') return;
-    
-    // Only restore recommendations if user is already on DSS tab
-    if (activeTab === 'dss') {
-      try {
-        const savedRecommendations = localStorage.getItem('fra_recommendations');
-        const savedSelectedClaim = localStorage.getItem('fra_selected_claim');
-        
-        if (savedRecommendations && savedSelectedClaim) {
-          console.log('=== RECOVERING STATE FROM LOCALSTORAGE (DSS TAB ACTIVE) ===');
-          console.log('Found saved recommendations:', JSON.parse(savedRecommendations).length);
-          console.log('Found saved selected claim:', savedSelectedClaim);
-          
-          // Only restore if current state is empty
-          if (recommendations.length === 0 && !selectedClaim) {
-            setRecommendations(JSON.parse(savedRecommendations));
-            setSelectedClaim(savedSelectedClaim);
-            console.log('State recovered from localStorage (DSS tab active)');
-          } else {
-            console.log('State already exists, not restoring');
-          }
-          console.log('==========================================');
-        }
-      } catch (error) {
-        console.error('Error accessing localStorage:', error);
-      }
-    } else {
-      // Clear localStorage when navigating away from DSS tab
-      // This prevents recommendations from showing on other tabs
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.removeItem('fra_recommendations');
-          localStorage.removeItem('fra_selected_claim');
-          console.log('Cleared localStorage - navigated away from DSS tab');
-        } catch (error) {
-          console.error('Error clearing localStorage:', error);
-        }
-      }
-    }
-  }, [activeTab]); // Run when activeTab changes
-
-  // Debug useEffect to track state changes and persist state
-  useEffect(() => {
-    console.log('=== STATE CHANGE DETECTED ===');
-    console.log('Render count:', renderCount.current);
-    console.log('selectedClaim:', selectedClaim);
-    console.log('recommendations.length:', recommendations.length);
-    console.log('isLoadingRecommendations:', isLoadingRecommendations);
-    console.log('justLoadedRecommendations:', justLoadedRecommendations);
-    
-    // Track when recommendations disappear unexpectedly
-    if (recommendations.length === 0 && selectedClaim && !isLoadingRecommendations && !justLoadedRecommendations) {
-      console.log('🚨 WARNING: Recommendations disappeared unexpectedly!');
-      console.log('Stack trace:', new Error().stack);
-    }
-    
-    console.log('=============================');
-
-    // Persist state changes to localStorage to combat Fast Refresh
-    if (selectedClaim && recommendations.length > 0 && typeof window !== 'undefined') {
-      try {
-        localStorage.setItem('fra_recommendations', JSON.stringify(recommendations));
-        localStorage.setItem('fra_selected_claim', selectedClaim);
-        console.log('State persisted to localStorage due to state change');
-      } catch (error) {
-        console.error('Error saving to localStorage:', error);
-      }
-    }
-  }, [selectedClaim, recommendations, isLoadingRecommendations, justLoadedRecommendations]);
-
-  // Reset the justLoadedRecommendations flag after a delay
-  useEffect(() => {
-    if (justLoadedRecommendations) {
-      const timer = setTimeout(() => {
-        console.log('Resetting justLoadedRecommendations flag');
-        setJustLoadedRecommendations(false);
-      }, 2000); // 2 second protection window
-
-      return () => clearTimeout(timer);
-    }
-  }, [justLoadedRecommendations]);
   const [extractionAccuracy, setExtractionAccuracy] = useState<number>(0);
   const [showAccuracy, setShowAccuracy] = useState<boolean>(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -661,17 +584,10 @@ export default function Dashboard() {
   };
 
   const loadRecommendations = async (claimId: string) => {
-    console.log('=== LOADING RECOMMENDATIONS START ===');
-    console.log('Claim ID:', claimId);
-    console.log('Current selectedClaim:', selectedClaim);
-    console.log('Current recommendations:', recommendations.length);
-    
     setSelectedClaim(claimId);
     setActiveTab('dss');
     setIsLoadingRecommendations(true);
     setRecommendations([]);
-    
-    console.log('State set - selectedClaim:', claimId, 'loading: true, recommendations: []');
     
     try {
       // Find the claim data
@@ -690,13 +606,12 @@ export default function Dashboard() {
         tribalGroup: claim.tribal_group,
         claimType: claim.claim_type,
         isScheduledTribe: claim.tribal_group && claim.tribal_group !== 'Not specified',
-        isOtherTraditionalForestDweller: false, // This would need to be stored in claim data
+        isOtherTraditionalForestDweller: false,
         landArea: claim.land_area,
-        familyMembers: [] // This would need to be stored in claim data
+        familyMembers: []
       };
 
       // Call the scheme recommendations API
-      console.log('Making POST request to /api/scheme-recommendations...');
       const response = await fetch('/api/scheme-recommendations', {
         method: 'POST',
         headers: {
@@ -705,56 +620,25 @@ export default function Dashboard() {
         body: JSON.stringify({ claimData }),
       });
 
-      console.log('Response received:', response.status, response.statusText);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-      console.log('API Response parsed successfully:', result);
 
       if (result.success) {
-        console.log('Recommendations data:', result.data);
-        console.log('Setting recommendations:', result.data.recommendations);
         const newRecommendations = result.data.recommendations || [];
         setRecommendations(newRecommendations);
-        
-        // Backup to localStorage to prevent loss on reload
-        if (typeof window !== 'undefined') {
-          try {
-            localStorage.setItem('fra_recommendations', JSON.stringify(newRecommendations));
-            localStorage.setItem('fra_selected_claim', claimId);
-          } catch (error) {
-            console.error('Error saving to localStorage:', error);
-          }
-        }
-        
-        console.log('Recommendations set, current state will be:', newRecommendations);
-        console.log('Recommendations count after set:', newRecommendations.length);
-        console.log('Backed up to localStorage');
-        
-        // Set flag to prevent state from being reset
-        setJustLoadedRecommendations(true);
-        
-        // Force a re-render to ensure state is properly displayed
-        setTimeout(() => {
-          console.log('Force re-render triggered');
-          setRecommendations(prev => [...prev]); // Trigger re-render
-        }, 100);
-        
-        showAlert('Recommendations Generated', `Found ${result.data.totalSchemes || 0} relevant government schemes for your claim.`, 'success');
+        setIsLoadingRecommendations(false);
       } else {
-        console.error('API Error:', result.error);
         showAlert('Error', result.error || 'Failed to generate recommendations', 'error');
         setRecommendations([]);
+        setIsLoadingRecommendations(false);
       }
     } catch (error) {
       console.error('Error loading recommendations:', error);
       showAlert('Error', 'Failed to load scheme recommendations', 'error');
       setRecommendations([]);
-    } finally {
       setIsLoadingRecommendations(false);
     }
   };
@@ -1504,162 +1388,110 @@ export default function Dashboard() {
                   </button>
                 </div>
 
-                {/* Force render test */}
-                <div className="p-4 bg-green-100 border border-green-300 rounded mb-4">
-                  <h4 className="font-bold text-green-800">FORCE RENDER TEST - Selected Claim View</h4>
-                  <p className="text-green-700">This should show when selectedClaim is truthy</p>
-                </div>
-
-                {/* Debug logging */}
-                {console.log('Rendering - isLoading:', isLoadingRecommendations, 'recommendations:', recommendations.length)}
-                
-                {/* Test render - should always show */}
-                <div className="p-4 bg-red-100 border border-red-300 rounded mb-4">
-                  <h3 className="text-lg font-bold text-red-800">TEST RENDER - This should always show</h3>
-                  <p className="text-red-700">Loading: {isLoadingRecommendations ? 'true' : 'false'}</p>
-                  <p className="text-red-700">Recommendations: {recommendations.length}</p>
-                  <p className="text-red-700">Selected Claim: {selectedClaim}</p>
-                </div>
-                
-                {isLoadingRecommendations ? (
-                  <div className="flex items-center justify-center py-16">
-                    <div className="text-center">
-                      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-600 mx-auto mb-6"></div>
-                      <h4 className="text-lg font-medium text-gray-900 mb-2">Generating Recommendations</h4>
-                      <p className="text-gray-600 mb-4">Our AI is analyzing your claim data and finding the best government schemes for you...</p>
-                      <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                        <div className="animate-bounce">•</div>
-                        <div className="animate-bounce" style={{animationDelay: '0.1s'}}>•</div>
-                        <div className="animate-bounce" style={{animationDelay: '0.2s'}}>•</div>
+                {/* Simple Recommendations Display */}
+                <div className="space-y-6">
+                  {recommendations.length > 0 ? (
+                    <>
+                      <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6">
+                        <div className="flex items-center">
+                          <CheckCircle className="h-8 w-8 text-green-600 mr-4" />
+                          <div>
+                            <h3 className="text-xl font-bold text-green-800">Recommendations Generated!</h3>
+                            <p className="text-green-700 mt-1">
+                              Found {recommendations.length} relevant government schemes for your claim
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    {/* Success message */}
-                    <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                      <div className="flex items-center">
-                        <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                        <span className="text-sm font-medium text-green-800">
-                          Found {recommendations.length} relevant government schemes for your claim
-                        </span>
-                      </div>
-                    </div>
 
-                    {/* Debug info */}
-                    <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
-                      <strong>Debug Info:</strong> Recommendations count: {recommendations.length}, 
-                      Loading: {isLoadingRecommendations ? 'true' : 'false'}, 
-                      Selected Claim: {selectedClaim}
-                    </div>
-
-                    {/* Simple test list */}
-                    <div className="mb-4 p-4 bg-blue-100 border border-blue-300 rounded">
-                      <h4 className="font-bold text-blue-800">Simple Test List:</h4>
-                      <ul className="text-blue-700">
+                      <div className="space-y-4">
                         {recommendations.map((rec, index) => (
-                          <li key={index} className="py-1">
-                            {index + 1}. {rec.schemeName || 'No name'}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Recommendations list */}
-                    {recommendations && recommendations.length > 0 ? (
-                      <div className="space-y-6">
-                        {recommendations.map((rec, index) => (
-                          <div key={index} className="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow bg-white">
-                            <div className="flex items-start justify-between mb-4">
-                              <div className="flex-1">
-                                <h4 className="text-xl font-semibold text-gray-900 mb-2">{rec.schemeName}</h4>
-                                <p className="text-sm text-gray-600 mb-3">
-                                  <span className="font-medium">Ministry:</span> {rec.ministry}
-                                </p>
-                                <div className="flex items-center space-x-2">
-                                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                    rec.category === 'Housing and Infrastructure Schemes' ? 'bg-blue-100 text-blue-800' :
-                                    rec.category === 'Agriculture and Forest-based Livelihood Schemes' ? 'bg-green-100 text-green-800' :
-                                    rec.category === 'Livelihood and Employment Schemes' ? 'bg-purple-100 text-purple-800' :
-                                    rec.category === 'Education and Skill Development Schemes' ? 'bg-yellow-100 text-yellow-800' :
-                                    rec.category === 'Health and Nutrition Schemes' ? 'bg-red-100 text-red-800' :
-                                    rec.category === 'Social Security and Welfare Schemes' ? 'bg-indigo-100 text-indigo-800' :
-                                    'bg-gray-100 text-gray-800'
-                                  }`}>
-                                    {rec.category}
-                                  </span>
-                                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                    rec.priority === 'High' ? 'bg-red-100 text-red-800' :
-                                    rec.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-green-100 text-green-800'
-                                  }`}>
-                                    {rec.priority} Priority
-                                  </span>
-                                </div>
+                          <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                            <div className="mb-4">
+                              <h4 className="text-xl font-semibold text-gray-900 mb-2">{rec.schemeName}</h4>
+                              <p className="text-gray-600 mb-3">
+                                <span className="font-medium">Ministry:</span> {rec.ministry}
+                              </p>
+                              <div className="flex items-center space-x-2">
+                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                  rec.category === 'Housing and Infrastructure Schemes' ? 'bg-blue-100 text-blue-800' :
+                                  rec.category === 'Agriculture and Forest-based Livelihood Schemes' ? 'bg-green-100 text-green-800' :
+                                  rec.category === 'Livelihood and Employment Schemes' ? 'bg-purple-100 text-purple-800' :
+                                  rec.category === 'Education and Skill Development Schemes' ? 'bg-yellow-100 text-yellow-800' :
+                                  rec.category === 'Health and Nutrition Schemes' ? 'bg-red-100 text-red-800' :
+                                  rec.category === 'Social Security and Welfare Schemes' ? 'bg-indigo-100 text-indigo-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {rec.category}
+                                </span>
+                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                  rec.priority === 'High' ? 'bg-red-100 text-red-800' :
+                                  rec.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-green-100 text-green-800'
+                                }`}>
+                                  {rec.priority} Priority
+                                </span>
                               </div>
                             </div>
                             
                             <div className="space-y-4">
                               <div>
                                 <h5 className="font-medium text-gray-900 mb-2">Description</h5>
-                                <p className="text-gray-700 leading-relaxed">{rec.description}</p>
+                                <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">{rec.description}</p>
                               </div>
                               
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                   <h5 className="font-medium text-gray-900 mb-2">Eligibility Criteria</h5>
-                                  <p className="text-sm text-gray-700 leading-relaxed">{rec.eligibility}</p>
+                                  <p className="text-sm text-gray-700 bg-blue-50 p-3 rounded-lg">{rec.eligibility}</p>
                                 </div>
                                 <div>
-                                  <h5 className="font-medium text-gray-900 mb-2">Benefits Provided</h5>
-                                  <p className="text-sm text-gray-700 leading-relaxed">{rec.benefits}</p>
+                                  <h5 className="font-medium text-gray-900 mb-2">Benefits</h5>
+                                  <p className="text-sm text-gray-700 bg-green-50 p-3 rounded-lg">{rec.benefits}</p>
                                 </div>
                               </div>
                               
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                   <h5 className="font-medium text-gray-900 mb-2">Application Process</h5>
-                                  <p className="text-sm text-gray-700 leading-relaxed">{rec.applicationProcess}</p>
+                                  <p className="text-sm text-gray-700 bg-purple-50 p-3 rounded-lg">{rec.applicationProcess}</p>
                                 </div>
                                 <div>
                                   <h5 className="font-medium text-gray-900 mb-2">Contact Information</h5>
-                                  <p className="text-sm text-gray-700 leading-relaxed">{rec.contactInfo}</p>
+                                  <p className="text-sm text-gray-700 bg-orange-50 p-3 rounded-lg">{rec.contactInfo}</p>
                                 </div>
                               </div>
                             </div>
                             
-                            <div className="mt-6 pt-4 border-t border-gray-200">
-                              <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-500">Government of India Centrally Sponsored Scheme</span>
-                                <button className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium flex items-center space-x-2">
-                                  <span>Get Application Details</span>
-                                  <ArrowRight className="h-4 w-4" />
-                                </button>
-                              </div>
+                            <div className="mt-4 pt-4 border-t border-gray-200">
+                              <button className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center space-x-2">
+                                <span>Get Application Details</span>
+                                <ArrowRight className="h-4 w-4" />
+                              </button>
                             </div>
                           </div>
                         ))}
                       </div>
-                    ) : (
-                      <div className="text-center py-16">
-                        <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <h4 className="text-lg font-medium text-gray-900 mb-2">No Recommendations Generated</h4>
-                        <p className="text-gray-600 mb-4">We couldn't generate recommendations for this claim. Please try again.</p>
-                        <button
-                          onClick={() => {
-                            const claimId = selectedClaim;
-                            if (claimId) {
-                              loadRecommendations(claimId);
-                            }
-                          }}
-                          className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium"
-                        >
-                          Try Again
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
+                    </>
+                  ) : (
+                    <div className="text-center py-16">
+                      <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h4 className="text-lg font-medium text-gray-900 mb-2">No Recommendations Generated</h4>
+                      <p className="text-gray-600 mb-4">We couldn't generate recommendations for this claim. Please try again.</p>
+                      <button
+                        onClick={() => {
+                          const claimId = selectedClaim;
+                          if (claimId) {
+                            loadRecommendations(claimId);
+                          }
+                        }}
+                        className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors font-medium"
+                      >
+                        Try Again
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
