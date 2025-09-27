@@ -1390,7 +1390,12 @@ export default function Dashboard() {
 
                 {/* Simple Recommendations Display */}
                 <div className="space-y-6">
-                  {recommendations.length > 0 ? (
+                  {isLoadingRecommendations ? (
+                    <div className="text-center py-16">
+                      <div className="text-lg font-medium text-gray-900 mb-2">Loading Recommendations...</div>
+                      <p className="text-gray-600">Please wait while we analyze your claim and find relevant government schemes.</p>
+                    </div>
+                  ) : recommendations.length > 0 ? (
                     <>
                       <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6">
                         <div className="flex items-center">
